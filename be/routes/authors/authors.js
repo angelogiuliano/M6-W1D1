@@ -59,3 +59,58 @@ router.post("/createAuthor", async (req, res) => {
 });
 
 module.exports = router;
+
+router.patch("/updateAuthor/:id", async (req, res) => {
+  const { id } = req.params;
+
+  const author = await AuthorsModel.findById(id);
+
+  if (!author) {
+    return res.status(404).send({
+      statusCode: 404,
+      message: "The requested author doesn't exist",
+    });
+  }
+
+  try {
+    const updatedAuthor = req.body;
+    const options = { new: true };
+
+    const result = await AuthorsModel.findByIdAndUpdate(
+      id,
+      updatedAuthor,
+      options
+    );
+
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(500).send({
+      statusCode: 500,
+      message: "Internal server error",
+    });
+  }
+});
+
+router.delete("/deleteAuthor/:id", async (req, res) => {
+  const { id } = req.params;
+
+  const author = await AuthorsModel.findById(id);
+
+  if (!author) {
+    return res.status(404).send({
+      statusCode: 404,
+      message: "The requested author doesn't exist",
+    });
+  }
+
+  try {
+    const result = await AuthorsModel.findByIdAndDelete(id);
+
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(500).send({
+      statusCode: 500,
+      message: "Internal server error",
+    });
+  }
+});
