@@ -1,5 +1,6 @@
 import axios from "axios";
 
+console.log(process.env.REACT_APP_SERVER_BASE_URL);
 class AxiosClient {
   static baseUrl = `${process.env.REACT_APP_SERVER_BASE_URL}`;
 

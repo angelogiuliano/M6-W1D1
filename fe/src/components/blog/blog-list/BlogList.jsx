@@ -5,14 +5,17 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   allBlogPosts,
   getAllBlogPosts,
+  isAllPostsError, isAllPostsLoading
 } from "../../../redux/blogPosts/blogPostsSlice";
 
 const BlogList = (props) => {
   const dispatch = useDispatch();
   const blogPosts = useSelector(allBlogPosts);
+  const isLoading = useSelector(isAllPostsLoading);
+  const isError = useSelector(isAllPostsError);
 
   useEffect(() => {
-    dispatch(getAllBlogPosts);
+    dispatch(getAllBlogPosts());
   }, [dispatch]);
 
   return (

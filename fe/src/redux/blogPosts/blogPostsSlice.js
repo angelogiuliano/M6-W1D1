@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import AxiosClient from "../../client/client";
+
 const client = new AxiosClient();
 
 const initialState = {
@@ -11,7 +12,8 @@ const initialState = {
 export const getAllBlogPosts = createAsyncThunk(
   "blogPosts/GETBlogPosts",
   async () => {
-    return await client.get("/getAuthors");
+    const response = await client.get(`/getAuthors`)
+    return response.json();
   }
 );
 
@@ -22,21 +24,20 @@ const blogPostsSlice = createSlice({
     builder
       .addCase(getAllBlogPosts.pending, (state) => {
         state.isLoading = true;
-        console.log(state);
       })
       .addCase(getAllBlogPosts.fulfilled, (state, action) => {
         state.isLoading = false;
         state.error = false;
         state.blogPosts = action.payload;
-        console.log(state);
       })
       .addCase(getAllBlogPosts.rejected, (state) => {
         state.isLoading = false;
         state.error = "Oops, please try again later";
-        console.log(state);
       });
   },
 });
 
-export const allBlogPosts = (state) => state.blogPostsData.blogPosts;
+export const allBlogPosts = (state) => state.postsData.blogPosts;
+export const isAllPostsLoading = (state) => state.postsData.isLoading;
+export const isAllPostsError = (state) => state.postsData.error;
 export default blogPostsSlice.reducer;
