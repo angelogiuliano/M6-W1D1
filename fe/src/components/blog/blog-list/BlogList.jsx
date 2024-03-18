@@ -18,11 +18,11 @@ const BlogList = (props) => {
     dispatch(getAllBlogPosts());
   }, [dispatch]);
 
-  console.log(blogPosts);
-
   return (
     <Row>
-      {blogPosts.map((post, i) => (
+      {isLoading && <div>Loading...</div>}
+      {!isLoading && isError && <div>Error</div>}
+      {!isLoading && !isError && blogPosts.map((post, i) => (
         <Col
           key={`item-${i}`}
           md={4}
