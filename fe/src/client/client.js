@@ -6,7 +6,7 @@ class AxiosClient {
 
   constructor() {
     this.axiosInstance = axios.create({
-      baseUrl: AxiosClient.baseUrl,
+      baseUrl: process.env.REACT_APP_SERVER_BASE_URL,
       maxContentLength: Infinity,
       headers: {
         Accept: "application/json",

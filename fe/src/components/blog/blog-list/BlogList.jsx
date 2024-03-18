@@ -18,9 +18,11 @@ const BlogList = (props) => {
     dispatch(getAllBlogPosts());
   }, [dispatch]);
 
+  console.log(blogPosts);
+
   return (
     <Row>
-      {/* {blogPosts.map((post, i) => (
+      {blogPosts.map((post, i) => (
         <Col
           key={`item-${i}`}
           md={4}
@@ -28,9 +30,9 @@ const BlogList = (props) => {
             marginBottom: 50,
           }}
         >
-          <BlogItem key={post.title} {...post} />
+          <BlogItem key={post._id} {...post} />
         </Col>
-      ))} */}
+      ))}
     </Row>
   );
 };
