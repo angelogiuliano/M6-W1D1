@@ -8,7 +8,7 @@ const port = 3001;
 const app = express();
 
 // import delle routes
-const authorsRoute = require("./routes/authors/authors");
+const authorsRoute = require("./routes/blogPosts/blogPosts");
 
 // middleware
 app.use(express.json());

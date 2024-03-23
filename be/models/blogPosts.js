@@ -1,29 +1,34 @@
 const mongoose = require("mongoose");
 
-const BlogPostSchema = mongoose.Schema({
-  category: {
-    type: String,
-    required: true,
-    max: 250,
+const BlogPostsSchema = mongoose.Schema(
+  {
+    firstName: {
+      type: String,
+      required: true,
+      max: 250,
+    },
+    lastName: {
+      type: String,
+      required: true,
+      max: 250,
+    },
+    email: {
+      type: String,
+      required: true,
+      max: 250,
+    },
+    bornDate: {
+      type: String,
+      required: true,
+      max: 250,
+    },
+    avatar: {
+      type: String,
+      required: true,
+      max: 250,
+    },
   },
-  title: {
-    type: String,
-    required: true,
-    max: 250,
-  },
-  cover: {
-    type: String,
-    required: true,
-    max: 250,
-  },
-  readTime: {
-    type: Number,
-    required: true,
-    max: 250,
-  },
-  author: {
-    type: String,
-    required: true,
-    max: 250,
-  }
-});
+  { timestamps: true, strict: true }
+);
+
+module.exports = mongoose.model("blogPostsModel", BlogPostsSchema, "blogPosts");

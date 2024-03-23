@@ -12,7 +12,7 @@ const initialState = {
 export const getAllBlogPosts = createAsyncThunk(
   "blogPosts/GETBlogPosts",
   async () => {
-    const response = await client.get(`${process.env.REACT_APP_SERVER_BASE_URL}/getAuthors`)
+    const response = await client.get(`${process.env.REACT_APP_SERVER_BASE_URL}/getBlogPosts`)
     return response;
   }
 );
