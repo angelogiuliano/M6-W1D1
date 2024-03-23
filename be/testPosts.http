@@ -1,0 +1,31 @@
+GET http://localhost:3001/getBlogPosts
+
+####
+
+POST http://localhost:3001/createBlogPost HTTP/1.1
+Content-Type: application/json
+
+{
+    "firstName": "Pluto",
+    "lastName": "Topolino",
+    "email": "email@eemmaaiill.it",
+    "bornDate": "1 Jan 2020",
+    "avatar": "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
+}
+
+####
+
+GET http://localhost:3001/getBlogPosts/65fea939a3ee71cdb1f2b94e
+
+####
+
+PATCH http://localhost:3001/updateBlogPost/65fea939a3ee71cdb1f2b94e
+Content-Type: application/json
+
+  {
+    "firstName": "Topolino"
+  }
+
+####
+
+DELETE http://localhost:3001/deleteBlogPost/65fea939a3ee71cdb1f2b94e

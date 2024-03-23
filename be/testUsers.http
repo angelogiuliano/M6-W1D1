@@ -1,0 +1,14 @@
+GET http://localhost:3001/getUsers
+
+####
+
+POST http://localhost:3001/createUser
+Content-Type: application/json
+
+{
+    "firstName": "Angelo",
+    "lastName": "Giuliano",
+    "email": "prova@prova.it",
+    "password": "ciao1234",
+    "age": 21
+}

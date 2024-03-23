@@ -8,13 +8,17 @@ const port = 3001;
 const app = express();
 
 // import delle routes
-const authorsRoute = require("./routes/blogPosts/blogPosts");
+const blogPostsRoute = require("./routes/blogPosts");
+const loginRoute = require('./routes/login')
+const usersRoute = require('./routes/users')
 
 // middleware
 app.use(express.json());
 app.use(cors());
 
-app.use("/", authorsRoute);
+app.use("/", blogPostsRoute);
+app.use("/", loginRoute)
+app.use("/", usersRoute)
 
 // connessione db
 mongoose.connect(process.env.MONGODB_URL);

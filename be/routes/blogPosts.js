@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const BlogPostSchema = require("../../models/blogPosts");
+const BlogPostSchema = require("../models/blogPosts");
 
 router.get("/getBlogPosts", async (req, res) => {
   try {
