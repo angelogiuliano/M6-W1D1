@@ -5,8 +5,7 @@ import Home from "./views/home/Home";
 import NewBlogPost from "./views/new/New";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { BlogDetails } from "./components/blog/blog-details/BlogDetails";
-import Login from "./components/login/Login";
-import { SignUp } from "./components/signup/SignUp";
+import { Login } from "./components/login/Login";
 
 function App() {
   return (
@@ -14,7 +13,6 @@ function App() {
       <NavBar />
       <Routes>
         <Route path="/" element={<Login />} />
-        {/* <Route path="/signup" element={<SignUp />} /> */}
         <Route path="/home" exact element={<Home />} />
         <Route path="/blog/:id" element={<BlogDetails />} />
         <Route path="/new" element={<NewBlogPost />} />
