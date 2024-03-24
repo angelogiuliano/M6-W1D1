@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import AxiosClient from "../../client/client";
 import { useNavigate } from "react-router-dom";
+import { SignUp } from "../signup/SignUp";
 
 const Login = () => {
   const client = new AxiosClient();
@@ -27,6 +28,11 @@ const Login = () => {
       navigate("/home");
     }
   };
+
+  // const goSignup = (e) => {
+  //   e.preventDefault();
+  //   navigate("/signup");
+  // };
 
   return (
     <div className="container">
@@ -82,10 +88,15 @@ const Login = () => {
                 className="form-text text-center mb-5 text-dark"
               >
                 Non sei registrato?
-                <a href="#" className="text-dark fw-bold ms-1">
+                <button
+                type="button"
+                  // onClick={(e) => goSignup(e)}
+                  className="ms-2 btn btn-primary"
+                >
                   Registrati ora!
-                </a>
+                </button>
               </div>
+              <SignUp/>
             </form>
           </div>
         </div>

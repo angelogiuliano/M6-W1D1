@@ -5,7 +5,7 @@ const validateUserBody = require('../middlewares/validateUserBody')
 const verified = require('../middlewares/verifyToken')
 const bcrypt = require('bcrypt')
 
-router.get('/getUsers', verified, async (request, response) => {
+router.get('/getUsers', async (request, response) => {
     const { page = 1, pageSize = 5 } = request.query;
     try {
         const users = await UsersModel.find()
