@@ -8,9 +8,10 @@ export const SignUpForm = ({ toggleShowForm, setToggleShowForm }) => {
   const onChangeFn = (e) => {
     e.preventDefault();
     const { name, value } = e.target;
+    const newValue = name === "age" ? Number(value) : value;
     setSignUpData({
       ...signUpData,
-      [name]: value,
+      [name]: newValue,
     });
   };
 
