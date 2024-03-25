@@ -1,6 +1,38 @@
 const express = require("express");
 const router = express.Router();
 const BlogPostSchema = require("../models/blogPosts");
+const verified = require("../middlewares/verifyToken");
+const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+require("dotenv").config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const cloudStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "authorsUploads",
+    public_id: (req, file) => file.name,
+  },
+});
+
+const cloudUpload = multer({ storage: cloudStorage });
+
+router.post("/uploadImg", cloudUpload.single("avatar"), async (req, res) => {
+  try {
+    res.status(200).json({ source: req.file.path });
+  } catch (error) {
+    res.status(500).send({
+      statusCode: 500,
+      message: "File upload error",
+    });
+  }
+});
 
 router.get("/getBlogPosts", async (req, res) => {
   try {

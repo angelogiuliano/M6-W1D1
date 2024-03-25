@@ -4,7 +4,6 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "./styles.css";
 import Col from "react-bootstrap/Col";
 import InputGroup from "react-bootstrap/InputGroup";
-import Row from "react-bootstrap/Row";
 import AxiosClient from "../../client/client";
 import { useNavigate } from "react-router-dom";
 
@@ -12,31 +11,89 @@ const NewBlogPost = (props) => {
   const [validated, setValidated] = useState(false);
   const [checked, setChecked] = useState(false);
   const [formData, setFormData] = useState({});
+  const [file, setFile] = useState(null);
 
   const client = new AxiosClient();
   const navigate = useNavigate();
+  // const session = localStorage.getItem("auth");
+
+  const onChangeHandleFile = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const uploadFile = async () => {
+    const fileData = new FormData();
+    fileData.append("avatar", file);
+
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/uploadImg`,
+        {
+          method: "POST",
+          body: fileData,
+        }
+      );
+      return await response.json();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    const options = {
+      weekday: "long",
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+    };
+    const newValue =
+      name === "bornDate"
+        ? new Date(value).toLocaleDateString("it-IT", options)
+        : value;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: newValue,
     });
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const form = event.currentTarget;
+  const submitAuthor = async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
     if (form.checkValidity() === false) {
-      event.stopPropagation();
+      e.stopPropagation();
     }
 
     setValidated(true);
-    await client.post(
-      `${process.env.REACT_APP_SERVER_BASE_URL}/createBlogPost`,
-      formData
-    );
+
+    if (file) {
+      try {
+        const uploadedFile = await uploadFile(file);
+        const bodyToSend = {
+          ...formData,
+          avatar: uploadedFile.source,
+        };
+        const response = await client.post(
+          `${process.env.REACT_APP_SERVER_BASE_URL}/createBlogPost`,
+          JSON.stringify(bodyToSend)
+        );
+        return await response.json();
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      try {
+        const response = await client.post(
+          `${process.env.REACT_APP_SERVER_BASE_URL}/createBlogPost`,
+          JSON.stringify(formData)
+        );
+        return await response.json();
+      } catch (error) {
+        console.error(error);
+      }
+    }
     navigate("/home");
+    navigate(0);
   };
 
   return (
@@ -44,7 +101,7 @@ const NewBlogPost = (props) => {
       <Form
         noValidate
         validated={validated}
-        onSubmit={handleSubmit}
+        onSubmit={submitAuthor}
         className="mt-5"
       >
         <Col className="mb-3 d-flex flex-column gap-3">
@@ -92,8 +149,18 @@ const NewBlogPost = (props) => {
               onChange={handleChange}
               name="bornDate"
               required
-              type="text"
+              type="date"
               placeholder="Born Date"
+            />
+            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group as={Col} md="4" controlId="validationCustom02">
+            <Form.Label>Born Date</Form.Label>
+            <Form.Control
+              onChange={onChangeHandleFile}
+              name="avatar"
+              type="file"
+              accept="image/png, image/gif, image/jpeg"
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>

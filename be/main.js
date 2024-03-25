@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const logger = require('./middlewares/logger')
 require("dotenv").config();
 
 const port = 3001;
@@ -16,6 +17,7 @@ const usersRoute = require('./routes/users')
 app.use(express.json());
 app.use(cors());
 
+app.use(logger)
 app.use("/", blogPostsRoute);
 app.use("/", loginRoute)
 app.use("/", usersRoute)

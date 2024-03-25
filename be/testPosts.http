@@ -1,3 +1,4 @@
+
 GET http://localhost:3001/getBlogPosts
 
 ####
@@ -28,4 +29,4 @@ Content-Type: application/json
 
 ####
 
-DELETE http://localhost:3001/deleteBlogPost/65fea939a3ee71cdb1f2b94e
+DELETE http://localhost:3001/deleteBlogPost/6601a0bf33fd3f0693e100d4
