@@ -1,55 +1,115 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
-import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "./styles.css";
-import {convertToRaw} from "draft-js"
-import draftToHtml from "draftjs-to-html"
-const NewBlogPost = props => {
-  const [text, setText] = useState("");
-  const handleChange = useCallback(value => {
-    
-    setText(draftToHtml(value));
-    console.log(text)
-    // console.log(convertToRaw(value.getCurrentContent()))
-  });
-  return (
-    <Container className="new-blog-container">
-      <Form className="mt-5">
-        <Form.Group controlId="blog-form" className="mt-3">
-          <Form.Label>Titolo</Form.Label>
-          <Form.Control size="lg" placeholder="Title" />
-        </Form.Group>
-        <Form.Group controlId="blog-category" className="mt-3">
-          <Form.Label>Categoria</Form.Label>
-          <Form.Control size="lg" as="select">
-            <option>Categoria 1</option>
-            <option>Categoria 2</option>
-            <option>Categoria 3</option>
-            <option>Categoria 4</option>
-            <option>Categoria 5</option>
-          </Form.Control>
-        </Form.Group>
-        <Form.Group controlId="blog-content" className="mt-3">
-          <Form.Label>Contenuto Blog</Form.Label>
+import Col from "react-bootstrap/Col";
+import InputGroup from "react-bootstrap/InputGroup";
+import Row from "react-bootstrap/Row";
+import AxiosClient from "../../client/client";
+import { useNavigate } from "react-router-dom";
 
-          <Editor value={text} onChange={handleChange} className="new-blog-content" />
+const NewBlogPost = (props) => {
+  const [validated, setValidated] = useState(false);
+  const [checked, setChecked] = useState(false);
+  const [formData, setFormData] = useState({});
+
+  const client = new AxiosClient();
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+    }
+
+    setValidated(true);
+    await client.post(
+      `${process.env.REACT_APP_SERVER_BASE_URL}/createBlogPost`,
+      formData
+    );
+    navigate("/home");
+  };
+
+  return (
+    <Container>
+      <Form
+        noValidate
+        validated={validated}
+        onSubmit={handleSubmit}
+        className="mt-5"
+      >
+        <Col className="mb-3 d-flex flex-column gap-3">
+          <Form.Group as={Col} md="4" controlId="validationCustom01">
+            <Form.Label>First name</Form.Label>
+            <Form.Control
+              onChange={handleChange}
+              name="firstName"
+              required
+              type="text"
+              placeholder="First name"
+            />
+            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group as={Col} md="4" controlId="validationCustom02">
+            <Form.Label>Last name</Form.Label>
+            <Form.Control
+              onChange={handleChange}
+              name="lastName"
+              required
+              type="text"
+              placeholder="Last name"
+            />
+            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group as={Col} md="4" controlId="validationCustomEmail">
+            <Form.Label>Email</Form.Label>
+            <InputGroup hasValidation>
+              <Form.Control
+                onChange={handleChange}
+                name="email"
+                type="email"
+                placeholder="Email"
+                aria-describedby="inputGroupPrepend"
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                Please choose a email.
+              </Form.Control.Feedback>
+            </InputGroup>
+          </Form.Group>
+          <Form.Group as={Col} md="4" controlId="validationCustom02">
+            <Form.Label>Born Date</Form.Label>
+            <Form.Control
+              onChange={handleChange}
+              name="bornDate"
+              required
+              type="text"
+              placeholder="Born Date"
+            />
+            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+          </Form.Group>
+        </Col>
+        <Form.Group className="mb-3">
+          <Form.Check
+            required
+            label="Agree to terms and conditions"
+            feedback="You must agree before submitting."
+            feedbackType="invalid"
+            onChange={() => setChecked(!checked)}
+          />
         </Form.Group>
-        <Form.Group className="d-flex mt-3 justify-content-end">
-          <Button type="reset" size="lg" variant="outline-dark">
-            Reset
-          </Button>
-          <Button
-            type="submit"
-            size="lg"
-            variant="dark"
-            style={{
-              marginLeft: "1em",
-            }}
-          >
-            Invia
-          </Button>
-        </Form.Group>
+        <Button className={!checked ? "disabled" : ""} type="submit">
+          Aggiungi autore
+        </Button>
       </Form>
     </Container>
   );

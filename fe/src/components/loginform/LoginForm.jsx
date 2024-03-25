@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import AxiosClient from "../../client/client";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const LoginForm = ({ toggleShowForm, setToggleShowForm }) => {
   const client = new AxiosClient();
@@ -25,6 +26,7 @@ export const LoginForm = ({ toggleShowForm, setToggleShowForm }) => {
     if (response.statusCode === 200) {
       localStorage.setItem("auth", JSON.stringify(response.token));
       navigate("/home");
+      navigate(0)
     }
   };
 
@@ -61,7 +63,8 @@ export const LoginForm = ({ toggleShowForm, setToggleShowForm }) => {
       </div>
 
       <div className="text-center">
-        <button type="submit" className="btn btn-primary px-5 mb-5 w-100">
+        <button as={Link}
+          to="/home" type="submit" className="btn btn-primary px-5 mb-5 w-100">
           Login
         </button>
       </div>

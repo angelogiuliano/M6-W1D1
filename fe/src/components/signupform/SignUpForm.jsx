@@ -22,6 +22,7 @@ export const SignUpForm = ({ toggleShowForm, setToggleShowForm }) => {
         `${process.env.REACT_APP_SERVER_BASE_URL}/createUser`,
         signUpData
       );
+      setToggleShowForm(!toggleShowForm);
     } catch (error) {
       console.error(error);
     }
