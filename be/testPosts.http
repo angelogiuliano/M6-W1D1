@@ -7,12 +7,24 @@ POST http://localhost:3001/createBlogPost HTTP/1.1
 Content-Type: application/json
 
 {
-    "firstName": "Pluto",
-    "lastName": "Topolino",
-    "email": "email@eemmaaiill.it",
-    "bornDate": "1 Jan 2020",
+    "title": "Tuplone",
+    "postDate": "1 Gennaio 2034",
     "avatar": "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png"
 }
+
+####
+
+POST http://localhost:3001/660435d6eb346efc95454746/comments HTTP/1.1
+Content-Type: application/json
+
+{
+  "text": "Prova commento",
+  "author": "io"
+}
+
+####
+
+GET http://localhost:3001/660435d6eb346efc95454746/comments
 
 ####
 
@@ -29,4 +41,4 @@ Content-Type: application/json
 
 ####
 
-DELETE http://localhost:3001/deleteBlogPost/6601a0bf33fd3f0693e100d4
+DELETE http://localhost:3001/deleteBlogPost/660445f132c63d3bd6658aa4

@@ -23,7 +23,7 @@ const cloudStorage = new CloudinaryStorage({
 
 const cloudUpload = multer({ storage: cloudStorage });
 
-router.post("/uploadImg", cloudUpload.single("avatar"), async (req, res) => {
+router.post("/uploadImg", cloudUpload.single("picture"), async (req, res) => {
   try {
     res.status(200).json({ source: req.file.path });
   } catch (error) {
@@ -68,14 +68,34 @@ router.get("/getBlogPosts/:id", async (req, res) => {
   }
 });
 
+router.get('/:id/comments', async (req, res) => {
+  const {id} = req.params
+
+  try {
+    const blogPost = await BlogPostSchema.findById(id);
+
+    if (!blogPost) {
+      return res.status(404).send({
+        statusCode: 404,
+        message: "The requested blog post doesn't exist",
+      });
+    }
+
+    res.status(200).send(blogPost.comments);
+  } catch (error) {
+    res.status(500).send({
+      statusCode: 500,
+      message: "Internal server error",
+    });
+  }
+})
+
 router.post("/createBlogPost", async (req, res) => {
   try {
     const newPost = new BlogPostSchema({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
-      bornDate: req.body.bornDate,
-      avatar: req.body.avatar,
+      title: req.body.title,
+      postDate: req.body.postDate,
+      picture: req.body.picture,
     });
     const postToSave = await newPost.save();
     res.status(201).send({
@@ -89,8 +109,6 @@ router.post("/createBlogPost", async (req, res) => {
     });
   }
 });
-
-module.exports = router;
 
 router.patch("/updateBlogPost/:id", async (req, res) => {
   const { id } = req.params;
@@ -146,3 +164,36 @@ router.delete("/deleteBlogPost/:id", async (req, res) => {
     });
   }
 });
+
+router.post("/:id/comments", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const blogPost = await BlogPostSchema.findById(id);
+
+    if (!blogPost) {
+      return res.status(404).send({
+        statusCode: 404,
+        message: "The requested blog post doesn't exist",
+      });
+    }
+
+    const newComment = {
+      text: req.body.text,
+      author: req.body.author,
+    };
+
+    console.log(newComment);
+
+    blogPost.comments.push(newComment);
+    await blogPost.save();
+    res.status(201).send(blogPost);
+  } catch (error) {
+    res.status(500).send({
+      statusCode: 500,
+      message: "Internal server error",
+    });
+  }
+});
+
+module.exports = router;

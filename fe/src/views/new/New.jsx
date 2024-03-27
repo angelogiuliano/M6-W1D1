@@ -15,7 +15,6 @@ const NewBlogPost = (props) => {
 
   const client = new AxiosClient();
   const navigate = useNavigate();
-  // const session = localStorage.getItem("auth");
 
   const onChangeHandleFile = (e) => {
     setFile(e.target.files[0]);
@@ -23,7 +22,7 @@ const NewBlogPost = (props) => {
 
   const uploadFile = async () => {
     const fileData = new FormData();
-    fileData.append("avatar", file);
+    fileData.append("picture", file);
 
     try {
       const response = await fetch(
@@ -71,13 +70,14 @@ const NewBlogPost = (props) => {
         const uploadedFile = await uploadFile(file);
         const bodyToSend = {
           ...formData,
-          avatar: uploadedFile.source,
+          picture: uploadedFile.source,
         };
+        console.log(uploadedFile);
         const response = await client.post(
           `${process.env.REACT_APP_SERVER_BASE_URL}/createBlogPost`,
           JSON.stringify(bodyToSend)
         );
-        return await response.json();
+        return await response;
       } catch (error) {
         console.error(error);
       }
@@ -92,8 +92,8 @@ const NewBlogPost = (props) => {
         console.error(error);
       }
     }
-    navigate("/home");
-    navigate(0);
+    // navigate("/home");
+    // navigate(0);
   };
 
   return (
@@ -106,48 +106,21 @@ const NewBlogPost = (props) => {
       >
         <Col className="mb-3 d-flex flex-column gap-3">
           <Form.Group as={Col} md="4" controlId="validationCustom01">
-            <Form.Label>First name</Form.Label>
+            <Form.Label>Title</Form.Label>
             <Form.Control
               onChange={handleChange}
-              name="firstName"
+              name="title"
               required
               type="text"
-              placeholder="First name"
+              placeholder="Title"
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} md="4" controlId="validationCustom02">
-            <Form.Label>Last name</Form.Label>
+            <Form.Label>Post Date</Form.Label>
             <Form.Control
               onChange={handleChange}
-              name="lastName"
-              required
-              type="text"
-              placeholder="Last name"
-            />
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group as={Col} md="4" controlId="validationCustomEmail">
-            <Form.Label>Email</Form.Label>
-            <InputGroup hasValidation>
-              <Form.Control
-                onChange={handleChange}
-                name="email"
-                type="email"
-                placeholder="Email"
-                aria-describedby="inputGroupPrepend"
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                Please choose a email.
-              </Form.Control.Feedback>
-            </InputGroup>
-          </Form.Group>
-          <Form.Group as={Col} md="4" controlId="validationCustom02">
-            <Form.Label>Born Date</Form.Label>
-            <Form.Control
-              onChange={handleChange}
-              name="bornDate"
+              name="postDate"
               required
               type="date"
               placeholder="Born Date"
@@ -155,10 +128,10 @@ const NewBlogPost = (props) => {
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} md="4" controlId="validationCustom02">
-            <Form.Label>Born Date</Form.Label>
+            <Form.Label>Picture</Form.Label>
             <Form.Control
               onChange={onChangeHandleFile}
-              name="avatar"
+              name="picture"
               type="file"
               accept="image/png, image/gif, image/jpeg"
             />
