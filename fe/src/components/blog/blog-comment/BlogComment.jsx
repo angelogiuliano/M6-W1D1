@@ -32,7 +32,7 @@ export const BlogComment = ({ id }) => {
             </div>
           );
         })}
-      {!comments && <p>Nessun commento trovato</p>}
+      {comments.length < 1 && <p>Nessun commento trovato</p>}
     </div>
   );
 };
