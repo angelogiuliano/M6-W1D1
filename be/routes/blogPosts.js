@@ -68,8 +68,8 @@ router.get("/getBlogPosts/:id", async (req, res) => {
   }
 });
 
-router.get('/:id/comments', async (req, res) => {
-  const {id} = req.params
+router.get("/:id/comments", async (req, res) => {
+  const { id } = req.params;
 
   try {
     const blogPost = await BlogPostSchema.findById(id);
@@ -88,7 +88,7 @@ router.get('/:id/comments', async (req, res) => {
       message: "Internal server error",
     });
   }
-})
+});
 
 router.post("/createBlogPost", async (req, res) => {
   try {
@@ -182,8 +182,6 @@ router.post("/:id/comments", async (req, res) => {
       text: req.body.text,
       author: req.body.author,
     };
-
-    console.log(newComment);
 
     blogPost.comments.push(newComment);
     await blogPost.save();

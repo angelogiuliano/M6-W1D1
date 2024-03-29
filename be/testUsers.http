@@ -13,3 +13,7 @@ Content-Type: application/json
     "password": "ciao1234",
     "age": 21
 }
+
+####
+
+DELETE http://localhost:3001/deleteUser/660154720ad749cee7065692

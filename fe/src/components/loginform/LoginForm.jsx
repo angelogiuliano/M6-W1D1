@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import AxiosClient from "../../client/client";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import Alert from "react-bootstrap/Alert";
 
 export const LoginForm = ({ toggleShowForm, setToggleShowForm }) => {
   const client = new AxiosClient();
   const [formData, setFormData] = useState({});
+  const [errorLogin, setErrorLogin] = useState();
 
   const navigate = useNavigate();
 
@@ -19,16 +21,22 @@ export const LoginForm = ({ toggleShowForm, setToggleShowForm }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const response = await client.post(
-      `${process.env.REACT_APP_SERVER_BASE_URL}/login`,
-      formData
-    );
-    if (response.statusCode === 200) {
-      localStorage.setItem("auth", JSON.stringify(response.token));
-      navigate("/home");
-      navigate(0)
+    try {
+      const response = await client.post(
+        `${process.env.REACT_APP_SERVER_BASE_URL}/login`,
+        formData
+      );
+      if (response.statusCode === 200) {
+        localStorage.setItem("auth", JSON.stringify(response.token));
+        navigate("/home");
+        navigate(0);
+      }
+    } catch (error) {
+      setErrorLogin(error.message)
     }
+
   };
+
 
   return (
     <form onSubmit={onSubmit} className="card-body cardbody-color p-lg-5">
@@ -40,6 +48,8 @@ export const LoginForm = ({ toggleShowForm, setToggleShowForm }) => {
           alt="profile"
         />
       </div>
+
+      {errorLogin && <Alert variant="danger">{errorLogin} <br /> Please sign up</Alert>}
 
       <div className="mb-3">
         <input
@@ -63,8 +73,12 @@ export const LoginForm = ({ toggleShowForm, setToggleShowForm }) => {
       </div>
 
       <div className="text-center">
-        <button as={Link}
-          to="/home" type="submit" className="btn btn-primary px-5 mb-5 w-100">
+        <button
+          as={Link}
+          to="/home"
+          type="submit"
+          className="btn btn-primary px-5 mb-5 w-100"
+        >
           Login
         </button>
       </div>
