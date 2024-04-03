@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import AxiosClient from "../../../client/client";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 export const MyModal = ({ showModal, setShowModal }) => {
   const [userData, setUserData] = useState({});
@@ -22,16 +23,12 @@ export const MyModal = ({ showModal, setShowModal }) => {
     });
   };
 
-  const getUser = async () => {
-    try {
-      const response = await client.get(
-        `${process.env.REACT_APP_SERVER_BASE_URL}/getUser/${key}`
-      );
-      setUserData(response);
-    } catch (error) {
-      console.log(error);
-    }
+  const getUser = () => {
+    const decodedUser = jwtDecode(key)
+    setUserData(decodedUser)
   };
+
+  
 
   const onSaveChanges = async (e) => {
     console.log("submitted");

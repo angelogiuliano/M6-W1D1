@@ -92,20 +92,6 @@ router.get("/getUsers/byAge/:age(\\d+)", async (request, response) => {
   }
 });
 
-router.get("/getUser/:key", async (req, res) => {
-  const { key } = req.params;
-
-  try {
-    const decoded = jwt.verify(key, process.env.SECRET_KEY);
-    res.status(200).send(decoded);
-  } catch (error) {
-    res.status(500).send({
-      statusCode: 500,
-      message: "Internal Server Error",
-    });
-  }
-});
-
 router.post("/createUser", validateUserBody, async (request, response) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(request.body.password, salt);
