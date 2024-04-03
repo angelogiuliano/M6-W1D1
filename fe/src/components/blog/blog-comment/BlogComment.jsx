@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import "./BlogComment.css";
 import AxiosClient from "../../../client/client";
 import { MyModal } from "./MyModal";
+import Card from "react-bootstrap/Card";
 
 export const BlogComment = ({ id }) => {
   const [comments, setComments] = useState([]);
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false);
   const client = new AxiosClient();
 
   const getComments = async () => {
@@ -20,23 +21,29 @@ export const BlogComment = ({ id }) => {
   }, []);
 
   return (
-    <div className="comments m-3 d-flex align-items-center">
+    <div className="comments m-3 d-flex align-items-start gap-3 flex-column flex-wrap">
       {comments &&
         comments.map((comment, i) => {
           return (
-            <div key={i} className="single-comment">
-              <p>
-                <b>Author:</b> {comment.author}
-              </p>
-              <p>
-                <b>Comment:</b> {comment.text}
-              </p>
-            </div>
+            <Card key={i}>
+              <Card.Body>
+                <p>
+                  <b>Author:</b> {comment.author}
+                </p>
+                <p>
+                  <b>Comment:</b> {comment.text}
+                </p>
+              </Card.Body>
+            </Card>
           );
         })}
-      {comments.length < 1 && <p className="m-0 mx-2">Nessun commento trovato</p>}
-      <MyModal showModal={showModal} setShowModal={setShowModal}/>
-      <button onClick={() => setShowModal(true)} className="btn btn-primary">Aggiungi un commento</button>
+      {comments.length < 1 && (
+        <p className="m-0 mx-2">Nessun commento trovato</p>
+      )}
+      <MyModal showModal={showModal} setShowModal={setShowModal} />
+      <button onClick={() => setShowModal(true)} className="btn btn-primary">
+        Aggiungi un commento
+      </button>
     </div>
   );
 };

@@ -28,8 +28,6 @@ export const MyModal = ({ showModal, setShowModal }) => {
     setUserData(decodedUser)
   };
 
-  
-
   const onSaveChanges = async (e) => {
     console.log("submitted");
     e.preventDefault();

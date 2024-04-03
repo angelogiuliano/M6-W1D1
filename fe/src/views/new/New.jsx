@@ -3,9 +3,9 @@ import { Button, Container, Form } from "react-bootstrap";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "./styles.css";
 import Col from "react-bootstrap/Col";
-import InputGroup from "react-bootstrap/InputGroup";
 import AxiosClient from "../../client/client";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const NewBlogPost = (props) => {
   const [validated, setValidated] = useState(false);
@@ -15,6 +15,9 @@ const NewBlogPost = (props) => {
 
   const client = new AxiosClient();
   const navigate = useNavigate();
+
+  const key = localStorage.getItem("auth");
+  const decodedUser = jwtDecode(key);
 
   const onChangeHandleFile = (e) => {
     setFile(e.target.files[0]);
@@ -52,11 +55,12 @@ const NewBlogPost = (props) => {
         : value;
     setFormData({
       ...formData,
+      author: decodedUser.firstName + " " + decodedUser.lastName,
       [name]: newValue,
     });
   };
 
-  const submitAuthor = async (e) => {
+  const submitPost = async (e) => {
     e.preventDefault();
     const form = e.currentTarget;
     if (form.checkValidity() === false) {
@@ -65,35 +69,31 @@ const NewBlogPost = (props) => {
 
     setValidated(true);
 
-    if (file) {
-      try {
+    try {
+      let response;
+      if (file) {
         const uploadedFile = await uploadFile(file);
         const bodyToSend = {
           ...formData,
           picture: uploadedFile.source,
         };
-        console.log(uploadedFile);
-        const response = await client.post(
+        response = await client.post(
           `${process.env.REACT_APP_SERVER_BASE_URL}/createBlogPost`,
           JSON.stringify(bodyToSend)
         );
-        return await response;
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      try {
-        const response = await client.post(
+      } else {
+        response = await client.post(
           `${process.env.REACT_APP_SERVER_BASE_URL}/createBlogPost`,
           JSON.stringify(formData)
         );
-        return await response.json();
-      } catch (error) {
-        console.error(error);
       }
+
+      navigate("/home");
+      navigate(0);
+      return response
+    } catch (error) {
+      console.error(error);
     }
-    // navigate("/home");
-    // navigate(0);
   };
 
   return (
@@ -101,11 +101,21 @@ const NewBlogPost = (props) => {
       <Form
         noValidate
         validated={validated}
-        onSubmit={submitAuthor}
+        onSubmit={submitPost}
         className="mt-5"
       >
         <Col className="mb-3 d-flex flex-column gap-3">
           <Form.Group as={Col} md="4" controlId="validationCustom01">
+            <Form.Label>Author</Form.Label>
+            <Form.Control
+              readOnly
+              name="author"
+              required
+              value={decodedUser.firstName + " " + decodedUser.lastName}
+            />
+            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group as={Col} md="4" controlId="validationCustom02">
             <Form.Label>Title</Form.Label>
             <Form.Control
               onChange={handleChange}
@@ -116,7 +126,7 @@ const NewBlogPost = (props) => {
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
-          <Form.Group as={Col} md="4" controlId="validationCustom02">
+          <Form.Group as={Col} md="4" controlId="validationCustom03">
             <Form.Label>Post Date</Form.Label>
             <Form.Control
               onChange={handleChange}
@@ -127,7 +137,7 @@ const NewBlogPost = (props) => {
             />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
-          <Form.Group as={Col} md="4" controlId="validationCustom02">
+          <Form.Group as={Col} md="4" controlId="validationCustom04">
             <Form.Label>Picture</Form.Label>
             <Form.Control
               onChange={onChangeHandleFile}
@@ -148,7 +158,7 @@ const NewBlogPost = (props) => {
           />
         </Form.Group>
         <Button className={!checked ? "disabled" : ""} type="submit">
-          Aggiungi autore
+          Aggiungi post
         </Button>
       </Form>
     </Container>

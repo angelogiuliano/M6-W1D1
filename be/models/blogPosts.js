@@ -20,6 +20,11 @@ const BlogPostsSchema = mongoose.Schema(
       required: true,
       max: 250,
     },
+    author: {
+      type: String,
+      required: true,
+      max: 250,
+    },
     postDate: {
       type: String,
       required: true,

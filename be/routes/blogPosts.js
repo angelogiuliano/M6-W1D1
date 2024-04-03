@@ -94,6 +94,7 @@ router.post("/createBlogPost", async (req, res) => {
   try {
     const newPost = new BlogPostSchema({
       title: req.body.title,
+      author: req.body.author,
       postDate: req.body.postDate,
       picture: req.body.picture,
     });
