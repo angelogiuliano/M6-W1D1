@@ -32,11 +32,13 @@ export const LoginForm = ({ toggleShowForm, setToggleShowForm }) => {
         navigate(0);
       }
     } catch (error) {
-      setErrorLogin(error.message)
+      setErrorLogin(error.message);
     }
-
   };
 
+  const handleLoginGithub = () => {
+    window.location.href = `${process.env.REACT_APP_SERVER_BASE_URL}/auth/github`;
+  };
 
   return (
     <form onSubmit={onSubmit} className="card-body cardbody-color p-lg-5">
@@ -49,7 +51,11 @@ export const LoginForm = ({ toggleShowForm, setToggleShowForm }) => {
         />
       </div>
 
-      {errorLogin && <Alert variant="danger">{errorLogin} <br /> Please sign up</Alert>}
+      {errorLogin && (
+        <Alert variant="danger">
+          {errorLogin} <br /> Please sign up
+        </Alert>
+      )}
 
       <div className="mb-3">
         <input
@@ -91,6 +97,15 @@ export const LoginForm = ({ toggleShowForm, setToggleShowForm }) => {
           onClick={() => setToggleShowForm(!toggleShowForm)}
         >
           Registrati ora!
+        </button>
+      </div>
+
+      <div
+        onClick={() => handleLoginGithub()}
+        className="form-text text-center mb-5 text-dark"
+      >
+        <button type="button" className="ms-2 btn btn-dark">
+          Registrati con GitHub
         </button>
       </div>
     </form>

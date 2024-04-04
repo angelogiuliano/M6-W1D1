@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const logger = require('./middlewares/logger')
+const logger = require("./middlewares/logger");
 require("dotenv").config();
 
 const port = 3001;
@@ -10,17 +10,19 @@ const app = express();
 
 // import delle routes
 const blogPostsRoute = require("./routes/blogPosts");
-const loginRoute = require('./routes/login')
-const usersRoute = require('./routes/users')
+const loginRoute = require("./routes/login");
+const usersRoute = require("./routes/users");
+const githubRoute = require("./routes/github");
 
 // middleware
 app.use(express.json());
 app.use(cors());
 
-app.use(logger)
+app.use(logger);
 app.use("/", blogPostsRoute);
-app.use("/", loginRoute)
-app.use("/", usersRoute)
+app.use("/", loginRoute);
+app.use("/", usersRoute);
+app.use("/", githubRoute);
 
 // connessione db
 mongoose.connect(process.env.MONGODB_URL);
