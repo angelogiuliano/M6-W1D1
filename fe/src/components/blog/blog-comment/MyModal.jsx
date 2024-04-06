@@ -15,21 +15,20 @@ export const MyModal = ({ showModal, setShowModal }) => {
   const client = new AxiosClient();
   const navigate = useNavigate();
 
-  const onChange = (e) => {
-    const { name, value } = e.target;
-    setComment({
-      author: userData.firstName + " " + userData.lastName,
-      [name]: value,
-    });
-  };
-
-  const getUser = () => {
+    const getUser = () => {
     const decodedUser = jwtDecode(key)
     setUserData(decodedUser)
   };
 
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setComment({
+      author: (userData.firstName && userData.lastName && userData.firstName + " " + userData.lastName) || (userData.displayName && userData.displayName),
+      [name]: value,
+    });
+  };
+
   const onSaveChanges = async (e) => {
-    console.log("submitted");
     e.preventDefault();
     try {
       await client.post(
@@ -38,7 +37,7 @@ export const MyModal = ({ showModal, setShowModal }) => {
       );
       navigate(0);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -56,7 +55,7 @@ export const MyModal = ({ showModal, setShowModal }) => {
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>User</Form.Label>
             <Form.Control
-              defaultValue={userData.firstName + " " + userData.lastName}
+              defaultValue={(userData.firstName && userData.lastName && userData.firstName + " " + userData.lastName) || (userData.displayName && userData.displayName)}
               readOnly
               type="text"
               placeholder="Username"

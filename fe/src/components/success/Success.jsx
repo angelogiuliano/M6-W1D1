@@ -6,7 +6,7 @@ export const Success = () => {
   const token = new URLSearchParams(window.location.search).get("token");
   const decodedToken = jwtDecode(token);
   const navigate = useNavigate();
-  console.log(decodedToken);
+
 
   useEffect(() => {
     if (decodedToken) {

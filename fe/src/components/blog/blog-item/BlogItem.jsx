@@ -10,7 +10,7 @@ const BlogItem = (props) => {
         <Card.Img
           variant="top"
           src={picture}
-          className="blog-cover object-fit-fill"
+          className="blog-cover object-fit-cover"
         />
         <Card.Body>
           <Card.Title>{title}</Card.Title>

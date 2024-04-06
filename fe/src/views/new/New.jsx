@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import "./styles.css";
@@ -7,17 +7,22 @@ import AxiosClient from "../../client/client";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
-const NewBlogPost = (props) => {
+const NewBlogPost = () => {
   const [validated, setValidated] = useState(false);
   const [checked, setChecked] = useState(false);
   const [formData, setFormData] = useState({});
   const [file, setFile] = useState(null);
+  const [usersName, setUsersName] = useState("");
 
   const client = new AxiosClient();
   const navigate = useNavigate();
 
   const key = localStorage.getItem("auth");
   const decodedUser = jwtDecode(key);
+
+  useEffect(() => {
+    checkUsersName(decodedUser);
+  }, [decodedUser]);
 
   const onChangeHandleFile = (e) => {
     setFile(e.target.files[0]);
@@ -41,6 +46,15 @@ const NewBlogPost = (props) => {
     }
   };
 
+  const checkUsersName = (data) => {
+    if (data.displayName) {
+      const fullGithubName = data.displayName.split(" ");
+      setUsersName(fullGithubName[0] + " " + fullGithubName[1]);
+    } else {
+      setUsersName(data.firstName + " " + data.lastName);
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     const options = {
@@ -55,7 +69,7 @@ const NewBlogPost = (props) => {
         : value;
     setFormData({
       ...formData,
-      author: decodedUser.firstName + " " + decodedUser.lastName,
+      author: usersName,
       [name]: newValue,
     });
   };
@@ -90,7 +104,7 @@ const NewBlogPost = (props) => {
 
       navigate("/home");
       navigate(0);
-      return response
+      return response;
     } catch (error) {
       console.error(error);
     }
@@ -107,12 +121,7 @@ const NewBlogPost = (props) => {
         <Col className="mb-3 d-flex flex-column gap-3">
           <Form.Group as={Col} md="4" controlId="validationCustom01">
             <Form.Label>Author</Form.Label>
-            <Form.Control
-              readOnly
-              name="author"
-              required
-              value={decodedUser.firstName + " " + decodedUser.lastName}
-            />
+            <Form.Control readOnly name="author" required value={usersName} />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} md="4" controlId="validationCustom02">

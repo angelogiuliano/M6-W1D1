@@ -14,7 +14,7 @@ function App() {
       <NavBar />
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/success" element={<Success />}/>
+        <Route path="/success" element={<Success />} />
         <Route path="/home" exact element={<Home />} />
         <Route path="/blog/:id" element={<BlogDetails />} />
         <Route path="/new" element={<NewBlogPost />} />

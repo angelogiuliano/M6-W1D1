@@ -9,7 +9,6 @@ export const BlogDetails = () => {
   const id = useParams();
   const client = new AxiosClient();
   const [postData, setPostData] = useState({});
-  const [isUserAuthor, setIsUserAuthor] = useState(false);
 
   const navigate = useNavigate();
 
