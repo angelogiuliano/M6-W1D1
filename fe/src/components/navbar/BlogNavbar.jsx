@@ -41,9 +41,9 @@ const NavBar = () => {
             Nuovo Post
           </Button>
 
-          <Button onClick={() => logoutFunction()} size="lg">
+          <button className={session ? "btn btn-primary btn-lg" : "invisible"} onClick={() => logoutFunction()} size="lg">
             Logout
-          </Button>
+          </button>
         </div>
       </Container>
     </Navbar>
