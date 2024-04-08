@@ -21,12 +21,17 @@ export const BlogDetails = () => {
 
   const deletePost = async () => {
     try {
+      if (window.confirm("Are you sure you want to delete this post?")) {
       const response = await client.delete(
         `${process.env.REACT_APP_SERVER_BASE_URL}/deleteBlogPost/${id.id}`
       );
       navigate("/home");
       navigate(0);
       return response;
+      } else {
+        return;
+      }
+
     } catch (error) {
       console.error(error);
     }

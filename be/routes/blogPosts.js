@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const BlogPostSchema = require("../models/blogPosts");
-const verified = require("../middlewares/verifyToken");
 const multer = require("multer");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
@@ -187,6 +186,45 @@ router.post("/:id/comments", async (req, res) => {
     blogPost.comments.push(newComment);
     await blogPost.save();
     res.status(201).send(blogPost);
+  } catch (error) {
+    res.status(500).send({
+      statusCode: 500,
+      message: "Internal server error",
+    });
+  }
+});
+
+router.patch("/:postId/comments/:commentId/deleteComment", async (req, res) => {
+  const { postId, commentId } = req.params;
+
+  const post = await BlogPostSchema.findById(postId);
+  console.log(post);
+
+  if (!post) {
+    return res.status(404).send({
+      statusCode: 404,
+      message: "The requested comment doesn't exist",
+    });
+  }
+
+  try {
+    const comment = post.comments.find(
+      (comment) => comment._id.toString() === commentId
+    );
+
+    if (!comment) {
+      return res.status(404).send({
+        statusCode: 404,
+        message: "The requested blog post doesn't exist",
+      });
+    }
+
+    const updatedBlogPost = await BlogPostSchema.findByIdAndUpdate(
+      postId,
+      { $pull: { comments: { _id: commentId } } },
+      { new: true }
+    );
+    res.status(200).send(updatedBlogPost);
   } catch (error) {
     res.status(500).send({
       statusCode: 500,
